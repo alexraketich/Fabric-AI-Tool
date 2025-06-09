@@ -3,6 +3,7 @@
 ## To run
 
 ```
+python3.12 -m venv .venv
 source .venv/bin/activate
 python fabric_ai_helper.py
 ```
