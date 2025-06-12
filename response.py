@@ -2,6 +2,7 @@ import getpass
 import os
 import re
 import configparser
+import logging
         
 from langchain_chroma import Chroma
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
@@ -13,6 +14,8 @@ from typing_extensions import List, TypedDict
 from langchain_core.documents import Document
 from langgraph.graph import START, StateGraph
 
+# Logging set up
+logger = logging.getLogger('custom')
 
 def generate_response(query, db_loc, tool_type, model, temp, num_docs) -> str:
     """
@@ -192,8 +195,9 @@ def generate_response(query, db_loc, tool_type, model, temp, num_docs) -> str:
     else:
         res = response["answer"] + print_context_list(response["context"])
 
+
     # For debugging
     # print(res)
-
+    logger.info(f"QUERY: {query}\nRESPONSE: {res}\nMODEL: {model}")
     return res
 
