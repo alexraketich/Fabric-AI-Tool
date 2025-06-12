@@ -3,9 +3,33 @@ import random
 import time
 import response as response
 import configparser
+import logging
+import os
+from datetime import datetime
+from pathlib import Path
 
 config = configparser.ConfigParser()
 config.read('fabric_ai.conf')
+
+# Logging Set-up
+log_loc = config['Logging']['log_loc']
+if os.path.exists(log_loc):
+    now = datetime.now()
+    date_str = now.strftime("%Y%m%d%H%M")
+    filename = date_str + "_custom.log"
+    log_loc = Path(os.path.dirname(log_loc), filename)
+    log_loc = str(log_loc)
+
+# ONLY configure custom logger
+logging.getLogger().handlers.clear()
+
+custom_logger = logging.getLogger('custom')
+custom_logger.setLevel(logging.INFO)
+
+custom_handler = logging.FileHandler(log_loc)
+custom_formatter = logging.Formatter('%(asctime)s - %(message)s')
+custom_handler.setFormatter(custom_formatter)
+custom_logger.addHandler(custom_handler)
 
 def chat_response(question, model, tool_type):
     """
